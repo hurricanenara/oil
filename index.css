@@ -12,5 +12,9 @@ svg {
 .country {
     fill: #fff;
     stroke: black;
-    stroke-opacity: 0.2;
+    stroke-width: 0.075px;
+}
+
+.country:hover {
+    fill: red;
 }
