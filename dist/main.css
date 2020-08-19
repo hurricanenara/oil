@@ -1,4 +1,15 @@
-body{background-color:#ccf;color:blue;display:flex;flex-direction:column}.center{display:flex;align-items:center;justify-content:center}.card{background:white;height:50vh;width:50vw;border-radius:15px;margin-top:15px;box-shadow:3px 3px 5px 5px #009,1px 0px 1px #009}.image-card{background-image:url(images/yoda-stitch.jpg);background-position:center}h2{font-size:3rem}
+@import url(https://fonts.googleapis.com/css?family=Raleway);
+body {
+  font-family: "Raleway", sans-serif;
+  color: #5820df;
+}
 
+.bar {
+  padding-left: 10px;
+  color: #5820df;
+  background: #59eab7;
+  border: 4px solid #ee97ef;
+  font-size: 0.8em;
+}
 
-/*# sourceMappingURL=main.css.map*/
+/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9zcmMvc3R5bGVzL2luZGV4LnNjc3MiLCJ3ZWJwYWNrOi8vL2luZGV4LnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IjtBQUdBO0VBQ0c7RUFDQTtBQ0RIOztBRElBO0VBQ0M7RUFDQTtFQUNBO0VBQ0E7RUFDQTtBQ0RELEMiLCJmaWxlIjoibWFpbi5jc3MiLCJzb3VyY2VzQ29udGVudCI6WyJAaW1wb3J0IHVybCgnaHR0cHM6Ly9mb250cy5nb29nbGVhcGlzLmNvbS9jc3M/ZmFtaWx5PVJhbGV3YXknKTtcblxuXG5ib2R5e1xuICAgZm9udC1mYW1pbHk6ICdSYWxld2F5Jywgc2Fucy1zZXJpZjtcbiAgIGNvbG9yOiAjNTgyMGRmO1xufVxuXG4uYmFyIHtcbiBwYWRkaW5nLWxlZnQ6IDEwcHg7XG4gY29sb3I6ICM1ODIwZGY7XG4gYmFja2dyb3VuZDogIzU5ZWFiNztcbiBib3JkZXI6IDRweCBzb2xpZCAjZWU5N2VmO1xuIGZvbnQtc2l6ZTogLjhlbTtcbn0iLCJAaW1wb3J0IHVybChcImh0dHBzOi8vZm9udHMuZ29vZ2xlYXBpcy5jb20vY3NzP2ZhbWlseT1SYWxld2F5XCIpO1xuYm9keSB7XG4gIGZvbnQtZmFtaWx5OiBcIlJhbGV3YXlcIiwgc2Fucy1zZXJpZjtcbiAgY29sb3I6ICM1ODIwZGY7XG59XG5cbi5iYXIge1xuICBwYWRkaW5nLWxlZnQ6IDEwcHg7XG4gIGNvbG9yOiAjNTgyMGRmO1xuICBiYWNrZ3JvdW5kOiAjNTllYWI3O1xuICBib3JkZXI6IDRweCBzb2xpZCAjZWU5N2VmO1xuICBmb250LXNpemU6IDAuOGVtO1xufSJdLCJzb3VyY2VSb290IjoiIn0=*/
