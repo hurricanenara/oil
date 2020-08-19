@@ -1,0 +1,16 @@
+
+svg {
+    margin: 0;
+    overflow: hidden;
+    background-color: #fff;
+}
+
+.sphere {
+    fill: rgba(16, 105, 213, 0.93);
+}
+
+.country {
+    fill: #fff;
+    stroke: black;
+    stroke-opacity: 0.2;
+}

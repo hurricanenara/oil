@@ -20,10 +20,7 @@ module.exports = {
           loader: "babel-loader",
           options: {
             presets: ["@babel/preset-env"],
-            plugins: ["@babel/plugin-proposal-optional-chaining", "@babel/plugin-transform-runtime",
-      {
-        "regenerator": true
-      }],
+            plugins: ["@babel/plugin-proposal-optional-chaining", "@babel/plugin-transform-runtime"],
             exclude: /node_modules/,
           }, // if we were using React.js, we would include "react"
         },
