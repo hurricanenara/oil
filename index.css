@@ -6,15 +6,32 @@ svg {
 }
 
 .sphere {
-    fill: rgba(16, 105, 213, 0.93);
+    fill: rgba(70, 123, 170, 0.78);
 }
 
 .country {
-    fill: #fff;
+    /* fill: #fff; */
     stroke: black;
     stroke-width: 0.075px;
 }
 
 .country:hover {
-    fill: red;
+    /* fill: red; */
+    stroke: #ffff;
+    stroke-width: 2px;
+}
+
+.zoom-controls {
+    cursor: pointer;
+    pointer-events: all;
+}
+
+rect {
+    font-size: 22px;
+    border: solid black 1px;
+    fill: grey;
+}
+
+svg .zoom-controls {
+    fill: white;
 }

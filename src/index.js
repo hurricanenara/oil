@@ -1,3 +1,5 @@
+import { loadAndProcessData } from './loadAndProcessData.js'
+import { data } from 'autoprefixer';
 
 let margin = { top: 50, left: 50, right: 50, bottom: 50 },
     height = 600 - margin.top - margin.bottom,
@@ -20,64 +22,86 @@ g.append('path')
     .attr('d', pathGenerator({type: 'Sphere'}))
 
 
-svg.call(d3.zoom().on('zoom', () => {
+g.call(d3.zoom().on('zoom', () => {
     g.attr('transform', d3.event.transform);
 }));
 
-// Promise.all([
-    // json('https://unpkg.com/world-atlas@1.1.4/world/50m.json'),
-    // tsv('https://unpkg.com/world-atlas@1.1.4/world/50m.tsv')
-// ]).then(([tsvData, topoJSONdata]) => {
+const colorScale = d3.scaleOrdinal();
 
-Promise.all([
-  d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json"),
-  d3.csv("src/assets/data/jan2020Test.csv"),
-]).then(([topoJSONdata, productionData]) => {
+d3.select("#zoom-in").on("click", function () {
+  // Smooth zooming
+  d3.zoom()
+    .on("zoom", () => {
+      g.attr("transform", d3.event.transform);
+    })
+    .scaleBy(g.transition().duration(550), 1.3);
+});
 
-    const outputByCountry = productionData.reduce((acc, d) => {
-        acc[d.country] = d;
-        return acc;
-    }, {});
+d3.select("#zoom-out")
+    .on("click", function () {
+  // Ordinal zooming
+  d3.zoom()
+    .on("zoom", () => {
+      g.attr("transform", d3.event.transform);
+    })
+    .scaleBy(g.transition().duration(550), 1 / 1.3);
+});
 
-    console.log(+outputByCountry["Algeria"].output)
+//slider
+let dataTime = d3.range(0, 15).map(d => new Date(2005 + d, 10, 3))
 
-    const countries = topojson.feature(topoJSONdata, topoJSONdata.objects.countries);
+let slider = d3
+  .sliderBottom()
+  .min(d3.min(dataTime))
+  .max(d3.max(dataTime))
+  .step(1000 * 60 * 60 * 24 * 365)
+  .width(400)
+  .tickFormat(d3.timeFormat("%Y"))
+  .tickValues(dataTime)
+  .default(new Date(2019, 10, 3))
+  .on('onchange', val => {
+    // add code to render year selected
+  })
 
-    countries.features.forEach(d => {
-        // debugger
-        // console.log(d.properties.name)
-        if (outputByCountry[d.properties.name]) {
-            debugger
-            // Object.assign({}, d["output"], +outputByCountry[d.properties.name].output)
-            Object.assign(d, {output: +outputByCountry[d.properties.name].output});
-            debugger
+d3.select('#slider')
+  .append('svg')
+  .attr('width', 500)
+  .attr('height', 100)
+  .append('g')
+  .attr('transform', 'translate(30, 30)')
+  .call(slider)
+//
+
+const dataType = ["Production", "Consumption"];
+
+d3.select('#selectDropdown')
+  .selectAll('dataTypeOptions')
+    .data(dataType)
+    .enter()
+    .append('option')
+    .text(d => d)
+    .attr('value', d => d);
+
+  loadAndProcessData().then(countries => {
+    colorScale.domain(countries.features.map(d => {if (typeof d.output === 'number') return d.output}))
+    colorScale.domain().sort((b, a) => a - b);
+    const testnum = colorScale.domain().sort((b, a) => a - b);
+    colorScale.range(d3.schemeSpectral[9]);
+
+  g.selectAll("path")
+    .data(countries.features)
+    .enter()
+    .append("path")
+    .attr("class", "country")
+    .attr("d", pathGenerator)
+    .attr("fill", d => {
+        if (typeof d.output === 'number') {
+            return colorScale(d.output)
+        } else {
+            return "rgba(204, 204, 204, 1)";
         }
-    });
-
-    // console.log(countries.features)
-
-    g
-      .selectAll("path")
-      .data(countries.features)
-      .enter()
-      .append("path")
-      .attr("class", "country")
-      .attr("d", pathGenerator)
-      .append("title")
-      .text((d) => d.properties.name);
-
+    })
+    .append("title")
+    .text((d) => `${d.properties.name}: ${Math.round((d.output * 0.01) + 'e+1') * 0.01} mb/d`);
 });
   
-// d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json").then((data) => {
-//     // console.log(data)
-//   }
-// );
-
-//   const countryName = tsvData.reduce((accumulator, d) => {
-//     accumulator[d.iso_n3] = d.name;
-//     return accumulator;
-//   }, {});
-//accumulator method is like the forEach method, but cleaner
-
-// d3.tsv("https://unpkg.com/browse/world-atlas@1.1.4/world/110m.tsv")
-//     .then(data => console.log(data))

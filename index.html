@@ -6,14 +6,23 @@
     <title>Crude</title>
     <link rel="stylesheet" href="index.css">
     <script src="https://d3js.org/d3.v5.min.js" type="module"></script>
-    <!-- <script src="https://unpkg.com/topojson@3.0.2/dist/topojson.min.js" type="module"></script> -->
     <script src="https://d3js.org/topojson.v1.min.js"></script>
-    <!-- <script src="/src/scripts/production.js" defer></script> -->
-    <script src="src/index.js" defer></script>
+    <script src="https://unpkg.com/d3-simple-slider"></script>
+    <script src="/dist/main.js" defer></script>
   </head>
 
   <body>
-    <h3>Hi there!</h3>
-    <div id="map"></div>
+    <div id="map">
+      <div id="slider"></div>
+      <select id="selectDropdown"></select>
+        <svg class="zoom-controls" transform="translate(10, 10)">
+          <g id="zoom-in" transform="translate(0, 0)">
+            <rect width="30" height="30">+</rect>
+          </g>
+          <g id="zoom-out" transform="translate(30, 0)">
+            <rect width="30" height="30">-</rect>
+          </g>
+        </svg>
+    </div>
   </body>
 </html>

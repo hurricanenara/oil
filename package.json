@@ -1,7 +1,6 @@
 {
   "name": "oil",
   "version": "1.0.0",
-  "type": "module",
   "description": "We all use it, but only few know about it. Some of the earliest civilizations relied heavily on oil. The Babylonians used it to waterproof their boat, the Egyptians used it to help preserve corpses. But it wasn't until the 19th centuries the full potential of the mysterious black substance was understood and exploited. This interactive map of oil attempts to help provide comprehensive and objective data about oil.",
   "main": "index.js",
   "dependencies": {
@@ -10,6 +9,7 @@
     "@babel/runtime": "^7.11.2",
     "d3": "^5.16.0",
     "d3-fetch": "^1.2.0",
+    "d3-simple-slider": "^1.8.0",
     "topojson": "^3.0.2"
   },
   "devDependencies": {
