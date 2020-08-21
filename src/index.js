@@ -1,103 +1,157 @@
-import "./styles/index.scss";
-import canvasExample from "./scripts/canvas";
-import Square from "./scripts/square";
-import { DOMExample } from "./scripts/DOMExample";
-const currentStateObj = {
-  currentExample: null,
-  currentEventListeners: [],
-};
+import { loadAndProcessData } from './loadAndProcessData.js'
+import { data } from 'autoprefixer';
 
-document.querySelector("#canvas-demo").addEventListener("click", startCanvas);
-document.querySelector("#DOM-demo").addEventListener("click", startDOM);
+let margin = { top: 50, left: 50, right: 50, bottom: 50 },
+    height = 600 - margin.top - margin.bottom,
+    width = 1100 - margin.left - margin.right;
 
-function startDOM() {
-  unregisterEventListeners();
-  clearDemo();
-  currentStateObj.currentExample = "DOMDEMO";
-  DOMExample();
-}
+let svg = d3.select("#map")
+    .append('svg')
+    .attr('height', height + margin.top + margin.bottom)
+    .attr('width', width + margin.left, margin.right)
+    .append('g')
+    .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-function startCanvas() {
-  clearDemo();
-  unregisterEventListeners();
-  currentStateObj.currentExample = "CANVASDEMO";
-  const canvas = new canvasExample();
-  canvas.createCanvas();
-  const squares = [new Square(canvas.ctx, canvas.coords, canvas.fillColor)];
+const projection = d3.geoNaturalEarth1();
+const pathGenerator = d3.geoPath().projection(projection);
 
-  let animating = true;
+const g = svg.append('g')
 
-  const animation = () => {
-    canvas.clearCanvas();
-    if (animating) squares.forEach((sq) => sq.updateSquare(canvas.fillColor));
-    squares.forEach((sq) => sq.drawSquare());
-    window.requestAnimationFrame(animation);
-    squares.forEach((sq) => {
-      if (sq.coords[0] + sq.coords[2] > window.innerWidth)
-        sq.reverseAnimation();
-      if (sq.coords[0] < 0) sq.reverseAnimation();
-    });
-  };
+g.append('path')
+    .attr('class', 'sphere')
+    .attr('d', pathGenerator({type: 'Sphere'}))
 
-  window.requestAnimationFrame(animation);
 
-  window.addEventListener("keydown", handleKeyDown);
-  currentStateObj.currentEventListeners.push([
-    "window",
-    "keydown",
-    handleKeyDown,
-  ]);
+g.call(d3.zoom().on('zoom', () => {
+    g.attr('transform', d3.event.transform);
+}));
 
-  window.addEventListener("mousedown", handleMouseDown);
-  currentStateObj.currentEventListeners.push([
-    "window",
-    "mousedown",
-    handleMouseDown,
-  ]);
+d3.select("#zoom-in").on("click", function () {
+  // Smooth zooming
+  d3.zoom()
+    .on("zoom", () => {
+      g.attr("transform", d3.event.transform);
+    })
+    .scaleBy(g.transition().duration(550), 1.3);
+});
 
-  function handleKeyDown(event) {
-    if (event.which === 32) {
-      event.preventDefault();
-      squares.forEach((sq) => sq.reverseAnimation());
-      canvas.setColor(`#${Math.floor(Math.random() * 16777215).toString(16)}`);
-    }
-  }
+d3.select("#zoom-out")
+    .on("click", function () {
+  // Ordinal zooming
+  d3.zoom()
+    .on("zoom", () => {
+      g.attr("transform", d3.event.transform);
+    })
+    .scaleBy(g.transition().duration(550), 1 / 1.3);
+});
 
-  function handleMouseDown(event) {
-    event.preventDefault();
-    squares.push(
-      new Square(
-        canvas.ctx,
-        canvas.coords.map((co) => co + 25),
-        canvas.fillColor
-      )
-    );
-    // animating = !animating;
-  }
-}
+const dataType = ["Production", "Consumption"];
 
-function unregisterEventListeners() {
-  while (currentStateObj.currentEventListeners.length) {
-    let [
-      selector,
-      event,
-      handler,
-    ] = currentStateObj.currentEventListeners.pop();
-    if (selector === "window") {
-      window.removeEventListener(event, handler);
-      console.log(handler);
+d3.select('#selectDropdown')
+  .selectAll('dataTypeOptions')
+    .data(dataType)
+    .enter()
+    .append('option')
+    .text(d => d)
+    .attr('value', d => d);
+
+let colorScale = d3.scaleOrdinal();
+
+loadAndProcessData(2019).then(countries => {
+  debugger
+  // colorScale.domain(countries.features.map(d => { if (typeof d.output === 'number') return d.output }))
+  colorScale.domain(countries.features.map(d => {
+    debugger
+    if (typeof d.output === 'number') {
+      return d.output;
     } else {
-      document.querySelector(selector).removeEventListener(event, handler);
+      return 0;
     }
-  }
-}
+     }
+  ))
+  colorScale.domain().sort((b, a) => a - b);
+  colorScale.range(d3.schemeSpectral[9]);
+  // console.log(countries)
+  console.log(colorScale.domain().sort((b, a) => a - b));
+  console.log(colorScale.domain())
 
-function clearDemo() {
-  if (currentStateObj.currentExample === "CANVASDEMO")
-    document.body.removeChild(document.querySelector("canvas"));
-  if (currentStateObj.currentExample === "DOMDEMO") {
-    [...document.querySelectorAll(".card")].forEach((elem) =>
-      document.body.removeChild(elem)
-    );
-  }
-}
+  g.selectAll("path")
+    .data(countries.features)
+    .enter()
+    .append("path")
+    .attr("class", "country")
+    .attr("d", pathGenerator)
+    .attr("fill", d => {
+      if (typeof d.output === 'number') {
+        return colorScale(d.output)
+      } else {
+        return "rgba(204, 204, 204, 1)";
+      }
+    })
+    .append("title")
+    .text((d) => `${d.properties.name}: ${Math.round((d.output * 0.01) + 'e+1') * 0.01} mb/d`);
+});
+
+let fetchDataByThisYear = 2019;
+
+//slider
+let dataTime = d3.range(0, 15).map(d => new Date(2005 + d, 10, 3))
+
+let slider = d3
+  .sliderBottom()
+  .min(d3.min(dataTime))
+  .max(d3.max(dataTime))
+  .step(1000 * 60 * 60 * 24 * 365)
+  .width(400)
+  .tickFormat(d3.timeFormat("%Y"))
+  .tickValues(dataTime)
+  .default(new Date(2019, 10, 3))
+  .on('onchange', val => {
+    debugger
+    fetchDataByThisYear = new Date(val).getFullYear();
+    
+    loadAndProcessData(fetchDataByThisYear).then(countries => {
+      debugger
+      // colorScale.domain(countries.features.map(d => { if (typeof d.output === 'number') return d.output }))
+      colorScale.domain(countries.features.map(d => {
+        if (typeof d.output === 'number') {
+          return d.output;
+        } else {
+          return 0;
+        }
+      }
+      ))
+      colorScale.domain().sort((b, a) => a - b);
+      colorScale.range(d3.schemeSpectral[9]);
+      // console.log(countries)
+      console.log(colorScale.domain().sort((b, a) => a - b));
+      console.log(colorScale.domain())
+
+      g.selectAll("path")
+        .data(countries.features)
+        .enter()
+        .append("path")
+        .attr("class", "country")
+        .attr("d", pathGenerator)
+        .attr("fill", d => {
+          if (typeof d.output === 'number') {
+            return colorScale(d.output)
+          } else {
+            return "rgba(204, 204, 204, 1)";
+          }
+        })
+        .append("title")
+        .text((d) => `${d.properties.name}: ${Math.round((d.output * 0.01) + 'e+1') * 0.01} mb/d`);
+    });
+  })
+
+d3.select('#slider')
+  .append('svg')
+  .attr('width', 500)
+  .attr('height', 100)
+  .append('g')
+  .attr('transform', 'translate(30, 30)')
+  .call(slider)
+//
+
+  

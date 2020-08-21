@@ -3,14 +3,26 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <link rel="stylesheet" href="./dist/main.css" />
-    <title>Document</title>
+    <title>Crude</title>
+    <link rel="stylesheet" href="index.css">
+    <script src="https://d3js.org/d3.v5.min.js" type="module"></script>
+    <script src="https://d3js.org/topojson.v1.min.js"></script>
+    <script src="https://unpkg.com/d3-simple-slider"></script>
+    <script src="/dist/main.js" defer></script>
   </head>
 
   <body>
-    <button id="canvas-demo">Canvas Demo</button>
-    <button id="DOM-demo">DOM Demo</button>
-    <script src="./dist/main.js"></script>
+    <div id="map">
+      <div id="slider"></div>
+      <select id="selectDropdown"></select>
+        <svg class="zoom-controls" transform="translate(10, 10)">
+          <g id="zoom-in" transform="translate(0, 0)">
+            <rect width="30" height="30">+</rect>
+          </g>
+          <g id="zoom-out" transform="translate(30, 0)">
+            <rect width="30" height="30">-</rect>
+          </g>
+        </svg>
+    </div>
   </body>
 </html>
