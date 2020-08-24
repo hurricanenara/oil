@@ -26,8 +26,6 @@ g.call(d3.zoom().on('zoom', () => {
     g.attr('transform', d3.event.transform);
 }));
 
-const colorScale = d3.scaleOrdinal();
-
 d3.select("#zoom-in").on("click", function () {
   // Smooth zooming
   d3.zoom()
@@ -47,6 +45,55 @@ d3.select("#zoom-out")
     .scaleBy(g.transition().duration(550), 1 / 1.3);
 });
 
+const dataType = ["Production", "Consumption"];
+
+d3.select('#selectDropdown')
+  .selectAll('dataTypeOptions')
+    .data(dataType)
+    .enter()
+    .append('option')
+    .text(d => d)
+    .attr('value', d => d);
+
+let colorScale = d3.scaleOrdinal();
+
+loadAndProcessData(2019).then(countries => {
+  debugger
+  // colorScale.domain(countries.features.map(d => { if (typeof d.output === 'number') return d.output }))
+  colorScale.domain(countries.features.map(d => {
+    debugger
+    if (typeof d.output === 'number') {
+      return d.output;
+    } else {
+      return 0;
+    }
+     }
+  ))
+  colorScale.domain().sort((b, a) => a - b);
+  colorScale.range(d3.schemeSpectral[9]);
+  // console.log(countries)
+  console.log(colorScale.domain().sort((b, a) => a - b));
+  console.log(colorScale.domain())
+
+  g.selectAll("path")
+    .data(countries.features)
+    .enter()
+    .append("path")
+    .attr("class", "country")
+    .attr("d", pathGenerator)
+    .attr("fill", d => {
+      if (typeof d.output === 'number') {
+        return colorScale(d.output)
+      } else {
+        return "rgba(204, 204, 204, 1)";
+      }
+    })
+    .append("title")
+    .text((d) => `${d.properties.name}: ${Math.round((d.output * 0.01) + 'e+1') * 0.01} mb/d`);
+});
+
+let fetchDataByThisYear = 2019;
+
 //slider
 let dataTime = d3.range(0, 15).map(d => new Date(2005 + d, 10, 3))
 
@@ -60,7 +107,42 @@ let slider = d3
   .tickValues(dataTime)
   .default(new Date(2019, 10, 3))
   .on('onchange', val => {
-    // add code to render year selected
+    debugger
+    fetchDataByThisYear = new Date(val).getFullYear();
+    
+    loadAndProcessData(fetchDataByThisYear).then(countries => {
+      debugger
+      // colorScale.domain(countries.features.map(d => { if (typeof d.output === 'number') return d.output }))
+      colorScale.domain(countries.features.map(d => {
+        if (typeof d.output === 'number') {
+          return d.output;
+        } else {
+          return 0;
+        }
+      }
+      ))
+      colorScale.domain().sort((b, a) => a - b);
+      colorScale.range(d3.schemeSpectral[9]);
+      // console.log(countries)
+      console.log(colorScale.domain().sort((b, a) => a - b));
+      console.log(colorScale.domain())
+
+      g.selectAll("path")
+        .data(countries.features)
+        .enter()
+        .append("path")
+        .attr("class", "country")
+        .attr("d", pathGenerator)
+        .attr("fill", d => {
+          if (typeof d.output === 'number') {
+            return colorScale(d.output)
+          } else {
+            return "rgba(204, 204, 204, 1)";
+          }
+        })
+        .append("title")
+        .text((d) => `${d.properties.name}: ${Math.round((d.output * 0.01) + 'e+1') * 0.01} mb/d`);
+    });
   })
 
 d3.select('#slider')
@@ -72,36 +154,4 @@ d3.select('#slider')
   .call(slider)
 //
 
-const dataType = ["Production", "Consumption"];
-
-d3.select('#selectDropdown')
-  .selectAll('dataTypeOptions')
-    .data(dataType)
-    .enter()
-    .append('option')
-    .text(d => d)
-    .attr('value', d => d);
-
-  loadAndProcessData().then(countries => {
-    colorScale.domain(countries.features.map(d => {if (typeof d.output === 'number') return d.output}))
-    colorScale.domain().sort((b, a) => a - b);
-    const testnum = colorScale.domain().sort((b, a) => a - b);
-    colorScale.range(d3.schemeSpectral[9]);
-
-  g.selectAll("path")
-    .data(countries.features)
-    .enter()
-    .append("path")
-    .attr("class", "country")
-    .attr("d", pathGenerator)
-    .attr("fill", d => {
-        if (typeof d.output === 'number') {
-            return colorScale(d.output)
-        } else {
-            return "rgba(204, 204, 204, 1)";
-        }
-    })
-    .append("title")
-    .text((d) => `${d.properties.name}: ${Math.round((d.output * 0.01) + 'e+1') * 0.01} mb/d`);
-});
   
