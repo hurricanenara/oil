@@ -23,7 +23,6 @@ export const loadAndProcessData = (fetchDataByThisYear) =>
              let country = d.country;
              let year = fetchDataByThisYear;
              acc[country] = {country: country, output: +d[year]}
-            //  debugger
              return acc;
            }, {});
 
@@ -35,12 +34,14 @@ export const loadAndProcessData = (fetchDataByThisYear) =>
            );
 
            countries.features.forEach((d) => {
+             debugger
              if (outputByCountry[d.properties.name]) {
                Object.assign(d, {
                  output: +outputByCountry[d.properties.name].output,
                });
              }
            });
-
+           debugger
+          //  console.log(countries);
            return countries;
          });

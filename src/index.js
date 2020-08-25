@@ -1,5 +1,6 @@
 import { loadAndProcessData } from './loadAndProcessData.js'
 import { data } from 'autoprefixer';
+import { selectAll } from 'd3';
 
 let margin = { top: 50, left: 50, right: 50, bottom: 50 },
     height = 600 - margin.top - margin.bottom,
@@ -9,6 +10,7 @@ let svg = d3.select("#map")
     .append('svg')
     .attr('height', height + margin.top + margin.bottom)
     .attr('width', width + margin.left, margin.right)
+    .attr('class', 'countries')
     .append('g')
     .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
@@ -72,10 +74,15 @@ loadAndProcessData(2019).then(countries => {
   colorScale.domain().sort((b, a) => a - b);
   colorScale.range(d3.schemeSpectral[9]);
   // console.log(countries)
-  console.log(colorScale.domain().sort((b, a) => a - b));
-  console.log(colorScale.domain())
+  // console.log(colorScale.domain().sort((b, a) => a - b));
+  // console.log(colorScale.domain())
 
-  g.selectAll("path")
+  let tooltip = d3.select('#map').append('div')
+     .attr('class', 'tooltip')
+     .style('opacity', 0)
+
+  const original = g
+    .selectAll("path")
     .data(countries.features)
     .enter()
     .append("path")
@@ -88,9 +95,31 @@ loadAndProcessData(2019).then(countries => {
         return "rgba(204, 204, 204, 1)";
       }
     })
+    .on("mouseover", d => {
+      tooltip.transition()
+        .duration(400)
+        .style("opacity", 0.7);
+      tooltip.html(`${d.properties.name}: ${Math.round((d.output * 0.01) + 'e+1') * 0.01} mb/d`)
+        .style('left', (d3.event.pageX) + 'px')
+        .style('top', (d3.event.pageY) + 'px');
+      // console.log(`${d.properties.name}: ${Math.round((d.output * 0.01) + 'e+1') * 0.01} mb/d`)
+      // console.log(d3.event);
+      // d3.select(d3.event.target).text("hello")
+    })
+    .on("mouseout", d => {
+      tooltip.transition()
+      .duration(500)
+      .style("opacity", 0);
+    })
     .append("title")
-    .text((d) => `${d.properties.name}: ${Math.round((d.output * 0.01) + 'e+1') * 0.01} mb/d`);
-});
+    // .text((d) => `${d.properties.name}: ${Math.round((d.output * 0.01) + 'e+1') * 0.01} mb/d`)
+    // console.log(original.selectAll("text"));
+    // console.log(original.selectAll("title"));
+    // console.log(d3.select('.countries'));
+    // d3.select('.countries')._groups[0].addEventListener("mouseenter", (e) => {
+    //   console.log(e);
+    // })
+  });
 
 let fetchDataByThisYear = 2019;
 
@@ -111,7 +140,10 @@ let slider = d3
     fetchDataByThisYear = new Date(val).getFullYear();
     
     loadAndProcessData(fetchDataByThisYear).then(countries => {
-      debugger
+      let tooltip = d3.select('#map').append('div')
+        .attr('class', 'tooltip')
+        .style('opacity', 0)
+      // console.log(countries)
       // colorScale.domain(countries.features.map(d => { if (typeof d.output === 'number') return d.output }))
       colorScale.domain(countries.features.map(d => {
         if (typeof d.output === 'number') {
@@ -121,13 +153,15 @@ let slider = d3
         }
       }
       ))
-      colorScale.domain().sort((b, a) => a - b);
+      colorScale.domain().sort((a, b) => a - b);
       colorScale.range(d3.schemeSpectral[9]);
       // console.log(countries)
-      console.log(colorScale.domain().sort((b, a) => a - b));
-      console.log(colorScale.domain())
+      // console.log(colorScale.domain().sort((b, a) => a - b));
+      // console.log(colorScale.domain());
+      // console.log(countries.features);
 
-      g.selectAll("path")
+      const selection = g
+        .selectAll("path")
         .data(countries.features)
         .enter()
         .append("path")
@@ -140,8 +174,37 @@ let slider = d3
             return "rgba(204, 204, 204, 1)";
           }
         })
-        .append("title")
-        .text((d) => `${d.properties.name}: ${Math.round((d.output * 0.01) + 'e+1') * 0.01} mb/d`);
+        .on("mouseover", d => {
+          tooltip.transition()
+            .duration(400)
+            .style("opacity", 0.7);
+          tooltip.html(`${d.properties.name}: ${Math.round((d.output * 0.01) + 'e+1') * 0.01} mb/d`)
+            .style('left', (d3.event.pageX) + 'px')
+            .style('top', (d3.event.pageY) + 'px');
+          // console.log(`${d.properties.name}: ${Math.round((d.output * 0.01) + 'e+1') * 0.01} mb/d`)
+          // console.log(d3.event);
+          // d3.select(d3.event.target).text("hello")
+        })
+        .on("mouseout", d => {
+          tooltip.transition()
+            .duration(500)
+            .style("opacity", 0);
+        })
+        // .append("title")
+        // .text((d) => {
+        //   debugger;
+        //   console.log(
+        //     `${d.properties.name}: ${
+        //       Math.round(d.output * 0.01 + "e+1") * 0.01
+        //     } mb/d`
+        //   );
+        //   // return `${d.properties.name}: ${
+        //   //   Math.round(d.output * 0.01 + "e+1") * 0.01
+        //   // } mb/d`;
+        //   return "hello";
+        // });
+        // console.log(selection.selectAll("title"))
+        // console.log(selection)
     });
   })
 
