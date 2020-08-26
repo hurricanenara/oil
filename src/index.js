@@ -82,7 +82,7 @@ loadAndProcessData(2019).then(countries => {
   debugger
   colorScale.domain([0, 100, 500, 2000, 4000, 8000, 12000, 16000, 20000]);
   colorScale.domain().sort((b, a) => a - b);
-  colorScale.range(d3.schemeReds[9])
+  colorScale.range(d3.schemeOranges[9])
 
   let tooltip = d3.select('#map').append('div')
      .attr('class', 'tooltip')
@@ -151,7 +151,7 @@ let slider = d3
       colorScale.domain([0, 100, 500, 2000, 4000, 8000, 12000, 16000, 20000]);
       colorScale.domain().sort((b, a) => a - b);
       // colorScale.range(d3.schemeBlues[9])
-      colorScale.range(d3.schemeReds[9])
+      colorScale.range(d3.schemeOranges[9])
 
       let tooltip = d3.select('#map').append('div')
         .attr('class', 'tooltip')
@@ -163,7 +163,7 @@ let slider = d3
         .data(countries.features)
         .attr("fill", d => {
           // console.log(d)
-          console.log("printed")
+          // console.log("printed")
           debugger
           if (typeof d.output === 'number') {
             debugger
