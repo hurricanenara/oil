@@ -1,7 +1,7 @@
 export const loadAndProcessData = (fetchDataByThisYear, dataType="Production") =>
          Promise.all([
            d3.json(
-             "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json"),
+             "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-10m.json"),
            d3.csv("src/assets/data/2005-2019PROD.csv"),
            d3.csv("src/assets/data/2005-2019CONS.csv")
           //  d3.csv("src/assets/data/jan2020Test.csv"),

@@ -16,6 +16,7 @@ let svg = d3.select("#map")
 
 const projection = d3.geoNaturalEarth1();
 const pathGenerator = d3.geoPath().projection(projection);
+console.log(pathGenerator)
 
 const g = svg.append('g')
 
@@ -23,33 +24,6 @@ g.append('path')
     .attr('class', 'sphere')
     .attr('d', pathGenerator({type: 'Sphere'}))
 
-// var defs = svg.append("defs");
-// let linearGradient = d3.selectAll("path").append("linearGradient")
-//   .attr("id", "animate-gradient")
-//   .attr("x1", "0%")
-//   .attr("y1", "0%")
-//   .attr("x2", "100%")
-//   .attr("y2", "0")
-//   .attr("spreadMethod", "reflect");
-
-// let colours = ["#FDA860", "#FC8669", "#E36172", "#C64277", "#E36172", "#FC8669", "#FDA860"];
-// linearGradient.selectAll(".stop")
-//   .data(colours)
-//   .enter().append("stop")
-//   .attr("offset", function (d, i) { return i / (colours.length - 1); })
-//   .attr("stop-color", function (d) { return d; });
-
-// linearGradient.append("animate")
-//   .attr("attributeName", "x1")
-//   .attr("values", "0%;100%")
-//   .attr("dur", "7s")
-//   .attr("repeatCount", "indefinite");
-
-// linearGradient.append("animate")
-//   .attr("attributeName", "x2")
-//   .attr("values", "100%;200%")
-//   .attr("dur", "7s")
-//   .attr("repeatCount", "indefinite");
 
 g.call(d3.zoom().on('zoom', () => {
     g.attr('transform', d3.event.transform);
@@ -79,10 +53,13 @@ d3.select("#zoom-out")
 let colorScale = d3.scaleThreshold(d3.schemeCategory10);
 
 loadAndProcessData(2019).then(countries => {
-  debugger
+  // console.log(
+  //   countries.features.map(country => `${country.properties.name}: ${country.output}`)
+  // )
+
   colorScale.domain([0, 100, 500, 2000, 4000, 8000, 12000, 16000, 20000]);
   colorScale.domain().sort((b, a) => a - b);
-  colorScale.range(d3.schemeOranges[9])
+  colorScale.range(d3.schemeBlues[9])
 
   let tooltip = d3.select('#map').append('div')
      .attr('class', 'tooltip')
@@ -150,8 +127,7 @@ let slider = d3
       colorScale = d3.scaleThreshold(d3.schemeCategory10);
       colorScale.domain([0, 100, 500, 2000, 4000, 8000, 12000, 16000, 20000]);
       colorScale.domain().sort((b, a) => a - b);
-      // colorScale.range(d3.schemeBlues[9])
-      colorScale.range(d3.schemeOranges[9])
+      colorScale.range(d3.schemeBlues[9])
 
       let tooltip = d3.select('#map').append('div')
         .attr('class', 'tooltip')
@@ -163,7 +139,6 @@ let slider = d3
         .data(countries.features)
         .attr("fill", d => {
           // console.log(d)
-          // console.log("printed")
           debugger
           if (typeof d.output === 'number') {
             debugger
