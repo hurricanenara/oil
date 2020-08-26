@@ -6,7 +6,9 @@ svg {
 }
 
 .sphere {
-    fill: rgba(70, 123, 170, 0.78);
+    fill: #0636b2;
+    /* fill: rgba(70, 123, 170, 0.78); */
+    /* fill: linear-gradient(270deg, #246655, #1f74d7); */
 }
 
 .country {
@@ -18,7 +20,7 @@ svg {
 .country:hover {
     /* fill: red; */
     stroke: #ffff;
-    stroke-width: 1px;
+    stroke-width: .5px;
 }
 
 .zoom-controls {

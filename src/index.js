@@ -23,6 +23,33 @@ g.append('path')
     .attr('class', 'sphere')
     .attr('d', pathGenerator({type: 'Sphere'}))
 
+// var defs = svg.append("defs");
+// let linearGradient = d3.selectAll("path").append("linearGradient")
+//   .attr("id", "animate-gradient")
+//   .attr("x1", "0%")
+//   .attr("y1", "0%")
+//   .attr("x2", "100%")
+//   .attr("y2", "0")
+//   .attr("spreadMethod", "reflect");
+
+// let colours = ["#FDA860", "#FC8669", "#E36172", "#C64277", "#E36172", "#FC8669", "#FDA860"];
+// linearGradient.selectAll(".stop")
+//   .data(colours)
+//   .enter().append("stop")
+//   .attr("offset", function (d, i) { return i / (colours.length - 1); })
+//   .attr("stop-color", function (d) { return d; });
+
+// linearGradient.append("animate")
+//   .attr("attributeName", "x1")
+//   .attr("values", "0%;100%")
+//   .attr("dur", "7s")
+//   .attr("repeatCount", "indefinite");
+
+// linearGradient.append("animate")
+//   .attr("attributeName", "x2")
+//   .attr("values", "100%;200%")
+//   .attr("dur", "7s")
+//   .attr("repeatCount", "indefinite");
 
 g.call(d3.zoom().on('zoom', () => {
     g.attr('transform', d3.event.transform);
@@ -47,35 +74,15 @@ d3.select("#zoom-out")
     .scaleBy(g.transition().duration(550), 1 / 1.3);
 });
 
-const dataType = ["Production", "Consumption"];
 
-d3.select('#selectDropdown')
-  .selectAll('dataTypeOptions')
-    .data(dataType)
-    .enter()
-    .append('option')
-    .text(d => d)
-    .attr('value', d => d);
-
-let colorScale = d3.scaleOrdinal();
+// let colorScale = d3.scaleOrdinal(d3.schemeCategory10);
+let colorScale = d3.scaleThreshold(d3.schemeCategory10);
 
 loadAndProcessData(2019).then(countries => {
   debugger
-  // colorScale.domain(countries.features.map(d => { if (typeof d.output === 'number') return d.output }))
-  colorScale.domain(countries.features.map(d => {
-    debugger
-    if (typeof d.output === 'number') {
-      return d.output;
-    } else {
-      return 0;
-    }
-     }
-  ))
+  colorScale.domain([0, 100, 500, 2000, 4000, 8000, 12000, 16000, 20000]);
   colorScale.domain().sort((b, a) => a - b);
-  colorScale.range(d3.schemeSpectral[9]);
-  // console.log(countries)
-  // console.log(colorScale.domain().sort((b, a) => a - b));
-  // console.log(colorScale.domain())
+  colorScale.range(d3.schemeReds[9])
 
   let tooltip = d3.select('#map').append('div')
      .attr('class', 'tooltip')
@@ -140,40 +147,35 @@ let slider = d3
     fetchDataByThisYear = new Date(val).getFullYear();
     
     loadAndProcessData(fetchDataByThisYear).then(countries => {
+      colorScale = d3.scaleThreshold(d3.schemeCategory10);
+      colorScale.domain([0, 100, 500, 2000, 4000, 8000, 12000, 16000, 20000]);
+      colorScale.domain().sort((b, a) => a - b);
+      // colorScale.range(d3.schemeBlues[9])
+      colorScale.range(d3.schemeReds[9])
+
       let tooltip = d3.select('#map').append('div')
         .attr('class', 'tooltip')
         .style('opacity', 0)
       // console.log(countries)
-      // colorScale.domain(countries.features.map(d => { if (typeof d.output === 'number') return d.output }))
-      colorScale.domain(countries.features.map(d => {
-        if (typeof d.output === 'number') {
-          return d.output;
-        } else {
-          return 0;
-        }
-      }
-      ))
-      colorScale.domain().sort((a, b) => a - b);
-      colorScale.range(d3.schemeSpectral[9]);
-      // console.log(countries)
-      // console.log(colorScale.domain().sort((b, a) => a - b));
-      // console.log(colorScale.domain());
-      // console.log(countries.features);
 
       const selection = g
         .selectAll("path")
         .data(countries.features)
-        .enter()
-        .append("path")
-        .attr("class", "country")
-        .attr("d", pathGenerator)
         .attr("fill", d => {
+          // console.log(d)
+          console.log("printed")
+          debugger
           if (typeof d.output === 'number') {
+            debugger
             return colorScale(d.output)
           } else {
             return "rgba(204, 204, 204, 1)";
           }
         })
+        .enter()
+        // .append("path")
+        .attr("class", "country")
+        .attr("d", pathGenerator)
         .on("mouseover", d => {
           tooltip.transition()
             .duration(400)
@@ -217,4 +219,13 @@ d3.select('#slider')
   .call(slider)
 //
 
+const dataType = ["Production", "Consumption"];
+
+d3.select('#selectDropdown')
+  .selectAll('dataTypeOptions')
+  .data(dataType)
+  .enter()
+  .append('option')
+  .text(d => d)
+  .attr('value', d => d);
   
