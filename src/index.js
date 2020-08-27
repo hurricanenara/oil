@@ -118,9 +118,6 @@ loadAndProcessData(2019).then(countries => {
       tooltip.html(`${d.properties.name}: ${Math.round((d.output * 0.0001) + 'e+1')} mb/d`)
         .style('left', (d3.event.pageX) + 'px')
         .style('top', (d3.event.pageY) + 'px');
-      // console.log(`${d.properties.name}: ${Math.round((d.output * 0.01) + 'e+1') * 0.01} mb/d`)
-      // console.log(d3.event);
-      // d3.select(d3.event.target).text("hello")
     })
     .on("mouseout", d => {
       tooltip.transition()
@@ -128,13 +125,6 @@ loadAndProcessData(2019).then(countries => {
       .style("opacity", 0);
     })
     .append("title")
-    // .text((d) => `${d.properties.name}: ${Math.round((d.output * 0.01) + 'e+1') * 0.01} mb/d`)
-    // console.log(original.selectAll("text"));
-    // console.log(original.selectAll("title"));
-    // console.log(d3.select('.countries'));
-    // d3.select('.countries')._groups[0].addEventListener("mouseenter", (e) => {
-    //   console.log(e);
-    // })
   });
 
 let fetchDataByThisYear = 2019;
