@@ -6,7 +6,7 @@ svg {
 }
 
 .sphere {
-    fill: #0636b2;
+    fill: #2d4680;
     /* fill: rgba(70, 123, 170, 0.78); */
     /* fill: linear-gradient(270deg, #246655, #1f74d7); */
 }
@@ -49,4 +49,8 @@ svg .zoom-controls {
     border: 0px;
     pointer-events: none;
     border-radius: 4px;
+}
+
+.body {
+    
 }

@@ -31,7 +31,7 @@ export const loadAndProcessData = (fetchDataByThisYear, dataType="Production") =
            );
 
            countries.features.forEach((d) => {
-             debugger
+            //  debugger
              if (valuesByCountry[d.properties.name]) {
                Object.assign(d, {
                  output: +valuesByCountry[d.properties.name].output,
