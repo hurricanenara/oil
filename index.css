@@ -5,6 +5,46 @@ svg {
     background-color: #fff;
 }
 
+.title-container {
+    border: maroon 1px solid;
+    height: 300px;
+}
+/* 
+.splash-container {
+    border: tomato 1px solid;
+    height: 600px;
+} */
+
+.map-container {
+    border: red 1px solid;
+    display: grid;
+    grid-template-rows: repeat(9, 1fr);
+    grid-template-columns: repeat(9, 1fr);
+    height: 900px;
+}
+
+#selectDropdown {
+    grid-area: 1 / 7 / 1 / 8;
+    display: flex;
+    align-self: center;
+    width: 100px;
+    height: 30px;
+    /* margin-bottom: 20px; */
+}
+
+#map {
+    grid-area: 2 / 3 / 8 / 9;
+    background-color: salmon;
+    display: flex;
+    justify-content: center;
+}
+
+#slider {
+    grid-area: 1 / 4 / 1 / 8;
+    display: flex;
+    justify-self: center;
+}
+
 .sphere {
     fill: #2d4680;
     /* fill: rgba(70, 123, 170, 0.78); */
@@ -36,6 +76,8 @@ rect {
 
 svg .zoom-controls {
     fill: white;
+    width: 40px;
+    height: 40px;
 }
 
 .tooltip {
