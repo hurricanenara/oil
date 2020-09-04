@@ -89,6 +89,9 @@ loadAndProcessData(2019).then(countries => {
   //   countries.features.map(country => `${country.properties.name}: ${country.output}`)
   // )
 
+  let whichData = d3.select("#selectDropdown")
+  console.log(whichData)
+
   colorScale.domain([0, 100, 500, 2000, 4000, 8000, 12000, 16000, 20000]);
   colorScale.domain().sort((b, a) => a - b);
   colorScale.range(d3.schemePurples[9])
@@ -213,7 +216,7 @@ d3.select('select')
       console.log(selected)
   })
 
-d3.select('#slider')
+d3.select('.map-container')
   .append('div')
   .attr('class', 'map-title')
   .text('World Map')
