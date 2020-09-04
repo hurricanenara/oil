@@ -17,41 +17,6 @@ let svg = d3.select("#map")
 const projection = d3.geoNaturalEarth1();
 const pathGenerator = d3.geoPath().projection(projection);
 
-// let defs = svg.select(".sphere");
-// let linearGradient = defs.append("linearGradient")
-//   .attr("id", "animate-gradient")
-//   .attr("x1", "0%")
-//   .attr("y1", "0%")
-//   .attr("x2", "100%")
-//   .attr("y2", "0")
-//   .attr("spreadMethod", "reflect");
-
-// var colours = ["#FDA860", "#FC8669", "#E36172", "#C64277", "#E36172", "#FC8669", "#FDA860"];
-// linearGradient.selectAll(".stop")
-//   .data(colours)
-//   .enter().append("stop")
-//   .attr("offset", function (d, i) { return i / (colours.length - 1); })
-//   .attr("stop-color", function (d) { return d; });
-
-// linearGradient.append("animate")
-//   .attr("attributeName", "x1")
-//   .attr("values", "0%;100%")
-//   .attr("dur", "7s")
-//   .attr("repeatCount", "indefinite");
-
-// linearGradient.append("animate")
-//   .attr("attributeName", "x2")
-//   .attr("values", "100%;200%")
-//   .attr("dur", "7s")
-//   .attr("repeatCount", "indefinite");
-
-// svg.append("rect")
-//   .attr("x", 0)
-//   .attr("y", 0)
-//   .attr("width", width)
-//   .attr("height", height)
-//   .style("fill", "url(#animate-gradient)");
-
 const g = svg.append('g')
 
 g.append('path')
