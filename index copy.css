@@ -51,18 +51,8 @@ svg {
     align-self: center;
 }
 
-.stop-left {
-    stop-color: #3f51b5;
-}
-
-.stop-right {
-    stop-color: #009688;
-}
-
 .sphere {
-    /* fill: url(mygrad); */
     fill: #2d4680;
-    /* fill: url(#sphere-gradient); */
     /* fill: rgba(70, 123, 170, 0.78); */
     /* fill: linear-gradient(270deg, #246655, #1f74d7); */
 }

@@ -12,7 +12,25 @@ let svg = d3.select("#map")
     .attr('width', width + margin.left, margin.right)
     .attr('class', 'countries')
     .append('g')
-    .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+    .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+
+let lg = svg
+  .append("defs")
+  .append("linearGradient")
+  .attr("id", "mygrad") //id of the gradient
+  .attr("x1", "0%")
+  .attr("x2", "0%")
+  .attr("y1", "0%")
+  .attr("y2", "100%"); //since its a vertical linear gradient
+lg.append("stop")
+  .attr("offset", "0%")
+  .style("stop-color", "red") //end in red
+  .style("stop-opacity", 1);
+
+lg.append("stop")
+  .attr("offset", "100%")
+  .style("stop-color", "blue") //start in blue
+  .style("stop-opacity", 1);
 
 const projection = d3.geoNaturalEarth1();
 const pathGenerator = d3.geoPath().projection(projection);
@@ -22,6 +40,7 @@ const g = svg.append('g')
 g.append('path')
     .attr('class', 'sphere')
     .attr('d', pathGenerator({type: 'Sphere'}))
+      .style("fill", "url(#mygrad)");
 
 
 g.call(d3.zoom().on('zoom', () => {
