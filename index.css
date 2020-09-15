@@ -25,21 +25,52 @@ svg {
     background-color: #fff;
 }
 
+.title-container h1 {
+    margin-bottom: 30px;
+    margin-top: 10px;
+    font-size: 48px;
+}
+
+.main-nav {
+    font-size: 18px;
+    list-style: none;
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: row;
+}
+
+.main-nav li a:link,
+.main-nav li a:visited,
+.main-nav li a:active {
+    padding-bottom: 5px;
+    text-decoration: none;
+    color: white;
+    border-bottom: 1px solid transparent;
+    /* border-top: 1px solid transparent; */
+    transition: border-bottom 500ms ease-in-out;
+}
+
+.main-nav li a:hover {
+    border-bottom: 1px solid white;
+    /* border-top: 1px solid white; */
+}
+
 .countries {
     /* background-image: linear-gradient(to top, #48c6ef 0%, #6f86d6 100%); */
-    background: linear-gradient(-45deg, #5159f3, #234ad6, #10566d, #4366e2);
+    background: linear-gradient(-45deg, #234ad6, #10566d, #4366e2);
     background-size: 550% 550%;
-    border-radius: 30px;
+    border-radius: 180px;
     animation: gradient 15s ease infinite;
 }
 
 #map {
     margin: 0 auto;
     border: rebeccapurple 1px solid;
-    border-radius: 90px;
+    border-radius: 200px;
     display: flex;
     justify-content: center;
-    background: linear-gradient(-45deg, #5159f3, #234ad6, #10566d, #4366e2);
+    background: linear-gradient(-45deg, #234ad6, #10566d, #4366e2);
     background-size: 550% 550%;
     animation: gradient 15s ease infinite;
 }
@@ -78,7 +109,6 @@ svg {
 }
 
 
-
 .controls {
     display: flex;
     justify-content: center;
@@ -87,6 +117,7 @@ svg {
 
 #selectDropdown {
     height: 32px;
+    outline: none;
 }
 
 .row {
