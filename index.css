@@ -6,7 +6,7 @@ svg {
 }
 
 .title-container {
-    border: maroon 1px solid;
+    border: green 1px solid;
     height: 300px;
     background: url("./src/assets/imsages/crude-oil.jpg") no-repeat center center fixed;
     background-size: cover;
@@ -19,15 +19,18 @@ svg {
 }
 
 .map-container {
-    border: red 1px solid;
-    display: grid;
+    border: purple 1px solid;
+    /* display: grid;
     grid-template-rows: repeat(9, 1fr);
-    grid-template-columns: repeat(7, 1fr);
-    height: 900px;
+    grid-template-columns: repeat(7, 1fr); */
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
 }
 
 #selectDropdown {
-    grid-area: 1 / 5 / 1 / 6;
+    /* grid-area: 1 / 5 / 1 / 6; */
     display: flex;
     align-self: center;
     justify-self: start;
@@ -35,17 +38,30 @@ svg {
     height: 30px;
 }
 
-#map {
-    width: 100vh;
-    top: 50%;
-    grid-area: 2 / 2 / 9 / 7;
-    border: tomato 1px solid;
+.controls {
     display: flex;
     justify-content: center;
+    align-items: center;
+}
+
+svg .countries {
+    display: flex;
+    justify-self: center;
+}
+
+#map {
+    margin: 0 auto;
+    /* grid-area: 2 / 2 / 9 / 7; */
+    border: tomato 1px solid;
+    /* display: flex; */
+    /* justify-content: center; */
+}
+.span {
+    margin-top: -200px;
 }
 
 #slider {
-    grid-area: 1 / 3 / 1 / 5;
+    /* grid-area: 1 / 3 / 1 / 5; */
     display: flex;
     justify-self: center;
     align-self: center;
