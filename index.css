@@ -19,6 +19,16 @@
     justify-content: center;
 }
 
+.intro-text {
+    width: 55%;
+    height: 210px;
+    margin: 0 auto;
+    letter-spacing: -0.01px;
+    line-height: 20px;
+    text-rendering: optimizeLegibility;
+    border-bottom: rgb(148, 187, 222) 1px solid;
+}
+
 svg {
     margin: 0;
     overflow: hidden;
@@ -70,6 +80,10 @@ svg {
     transform: translate(-30, 0);
 } */
 
+.map-features {
+    padding-top: 0;
+}
+
 #map {
     /* width: 930px; */
     margin: 0 auto;
@@ -115,11 +129,15 @@ svg {
     border-radius: 4px;
 }
 
+.spacer {
+    height: 7px;
+}
 
 .controls {
     display: flex;
     justify-content: center;
     align-items: center;
+    padding-top: 20px;
 }
 
 .slider {
