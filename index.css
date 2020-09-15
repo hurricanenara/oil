@@ -2,10 +2,10 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: "Nunito Sans";
 }
 
 .title-container {
-    border: green 1px solid;
     height: 200px;
     /* background-image: linear-gradient(to right, #d7d2cc 0%, #304352 100%); */
     background: linear-gradient(to bottom, rgba(26, 23, 23, 0.045) 0%, rgba(0,0,0,0.15) 100%), radial-gradient(at top center, rgba(255,255,255,0.40) 0%, rgba(0,0,0,0.40) 120%) #989898;
@@ -20,13 +20,14 @@
 }
 
 .intro-text {
-    width: 55%;
+    width: 57%;
     height: 210px;
     margin: 0 auto;
-    letter-spacing: -0.01px;
+    letter-spacing: 0.1px;
     line-height: 20px;
     text-rendering: optimizeLegibility;
     border-bottom: rgb(148, 187, 222) 1px solid;
+    padding: 40px 0;
 }
 
 svg {
@@ -72,7 +73,7 @@ svg {
     /* background-image: linear-gradient(to top, #48c6ef 0%, #6f86d6 100%); */
     background: linear-gradient(-45deg, #234ad6, #10566d, #4366e2);
     background-size: 550% 550%;
-    border-radius: 290px;
+    border-radius: 365px;
     animation: gradient 15s ease infinite;
 }
 
@@ -119,7 +120,7 @@ svg {
 .tooltip {
     position: absolute;
     text-align: center;
-    width: 89px;
+    width: 92px;
     height: auto;
     padding: 2.5px;
     font-size: 11px;
@@ -156,6 +157,7 @@ svg {
 #selectDropdown {
     height: 32px;
     outline: none;
+    border-radius: 10px;
 }
 
 .row {
