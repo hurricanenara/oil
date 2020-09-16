@@ -100,6 +100,9 @@ let fetchDataByThisYear = 2019;
 
 //slider
 let dataTime = d3.range(0, 15).map(d => new Date(2005 + d, 10, 3))
+let selected = document.getElementById('selectDropdown')
+let dataType = selected.options[selected.options.selectedIndex].text;
+console.log(dataType)
 
 let slider = d3
   .sliderBottom()
@@ -113,8 +116,15 @@ let slider = d3
   .on('onchange', val => {
     debugger
     fetchDataByThisYear = new Date(val).getFullYear();
+
+    // nest timeline inside of production/consumption
+    // does it really matter?
+    let dropdown = d3.select('#selectDropdown')
+      .on('change', function (d) {
+        console.log(selected.options[selected.options.selectedIndex].text)
+      });
     
-    loadAndProcessData(fetchDataByThisYear).then(countries => {
+    loadAndProcessData(fetchDataByThisYear, dataType).then(countries => {
       colorScale = d3.scaleThreshold(d3.schemeCategory10);
       colorScale.domain([0, 100, 500, 2000, 4000, 8000, 12000, 16000, 20000]);
       colorScale.domain().sort((b, a) => a - b);
@@ -183,14 +193,16 @@ d3.select('#slider')
 //   .text('World Map')
 
 
-console.log('hello')
-let selected = document.getElementById('selectDropdown')
-let dropdownOptions = selected.options;
-console.log(selected.options[selected.options.selectedIndex].text)
+// console.log('hello')
+// let selected = document.getElementById('selectDropdown')
+// let dropdownOptions = selected.options;
+// console.log(selected.options[selected.options.selectedIndex].text)
 
-let dropdown = d3.select('#selectDropdown');
+// let dropdown = d3.select('#selectDropdown')
+//   .on('change', function(d) {
+//     let selected = document.getElementById('selectDropdown')
+//     console.log(selected.options[selected.options.selectedIndex].text)
+//   })
   // .on('onchange', e => {
   //   console.log(e)
   // })
-
-  console.log(dropdown)
