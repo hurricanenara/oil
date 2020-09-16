@@ -90,9 +90,8 @@ let fetchDataByThisYear = 2019;
 
 //slider
 let dataTime = d3.range(0, 15).map(d => new Date(2005 + d, 10, 3))
-let selected = document.getElementById('selectDropdown')
+const selected = document.getElementById('selectDropdown')
 let dataType = selected.options[selected.options.selectedIndex].text;
-// console.log(dataType)
 
 let slider = d3
   .sliderBottom()
@@ -122,13 +121,11 @@ let slider = d3
       let tooltip = d3.select('#map').append('div')
         .attr('class', 'tooltip')
         .style('opacity', 0)
-      // console.log(countries)
 
       const selection = g
         .selectAll("path")
         .data(countries.features)
         .attr("fill", d => {
-          // console.log(d)
           if (typeof d.output === 'number') {
             debugger
             return colorScale(d.output)
@@ -163,7 +160,60 @@ d3.select('#slider')
   .append('g')
   .attr('transform', 'translate(30, 30)')
   .call(slider)
-//
+
+  let dropdown = d3.select('#selectDropdown')
+  .on('change', function(d) {
+    let selected = document.getElementById('selectDropdown')
+    let initialDataType = selected.options[selected.options.selectedIndex].text;
+    // console.log(selected.options[selected.options.selectedIndex].text)
+        loadAndProcessData(2019, initialDataType).then(countries => {
+      debugger
+      colorScale = d3.scaleThreshold(d3.schemeCategory10);
+      colorScale.domain([0, 100, 500, 2000, 4000, 8000, 12000, 16000, 20000]);
+      colorScale.domain().sort((b, a) => a - b);
+      colorScale.range(d3.schemePurples[9])
+
+      let tooltip = d3.select('#map').append('div')
+        .attr('class', 'tooltip')
+        .style('opacity', 0)
+
+      const selection = g
+        .selectAll("path")
+        .data(countries.features)
+        .attr("fill", d => {
+          if (typeof d.output === 'number') {
+            debugger
+            return colorScale(d.output)
+          } else {
+            return "rgba(204, 204, 204, 1)";
+          }
+        })
+        .enter()
+        // .append("path")
+        .attr("class", "country")
+        .attr("d", pathGenerator)
+        .on("mouseover", d => {
+          tooltip.transition()
+            .duration(400)
+            .style("opacity", 0.7);
+          tooltip.html(`${d.properties.name}: ${Math.round((d.output * 0.001) + 'e+1')} mb/d`)
+            .style('left', (d3.event.pageX) + 'px')
+            .style('top', (d3.event.pageY) + 'px');
+        })
+        .on("mouseout", d => {
+          tooltip.transition()
+            .duration(500)
+            .style("opacity", 0);
+        })
+    });
+  })
+
+
+
+
+  // .on('onchange', e => {
+  //   console.log(e)
+  // })
 
 // const toggle = ["Production", "Consumption"];
 
