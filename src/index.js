@@ -1,6 +1,5 @@
 import { loadAndProcessData } from './loadAndProcessData.js'
 
-
 let margin = { top: 50, left: 50, right: 50, bottom: 50 },
     height = 600 - margin.top - margin.bottom,
     width = 950 - margin.left - margin.right;
@@ -12,7 +11,6 @@ let svg = d3.select("#map")
     .attr('class', 'countries')
     .append('g')
     .attr('transform', 'translate(' + -15 + ',' + margin.top + ')')
-    // .attr('transform', 'translate(0, 30)')
 
 
 const projection = d3.geoNaturalEarth1();
@@ -46,17 +44,9 @@ d3.select("#zoom-out")
     .scaleBy(g.transition().duration(550), 1 / 1.3);
 });
 
-
-// let colorScale = d3.scaleOrdinal(d3.schemeCategory10);
 let colorScale = d3.scaleThreshold(d3.schemeCategory10);
 
 loadAndProcessData(2019).then(countries => {
-  // console.log(
-  //   countries.features.map(country => `${country.properties.name}: ${country.output}`)
-  // )
-
-  let whichData = d3.select("#selectDropdown")
-  // console.log(whichData)
 
   colorScale.domain([0, 100, 500, 2000, 4000, 8000, 12000, 16000, 20000]);
   colorScale.domain().sort((b, a) => a - b);
@@ -121,9 +111,6 @@ let slider = d3
     let dropdown = d3.select('#selectDropdown')
     //   .on('change', function (d) {
       dataType = selected.options[selected.options.selectedIndex].text;
-      // console.log(selected.options[selected.options.selectedIndex].text)
-      // console.log(dataType)
-    //   });
     
     loadAndProcessData(fetchDataByThisYear, dataType).then(countries => {
       debugger
