@@ -1,6 +1,5 @@
 import { loadAndProcessData } from './loadAndProcessData.js'
 
-console.log('hello')
 
 let margin = { top: 50, left: 50, right: 50, bottom: 50 },
     height = 600 - margin.top - margin.bottom,
@@ -168,17 +167,30 @@ d3.select('#slider')
   .call(slider)
 //
 
-const toggle = ["Production", "Consumption"];
+// const toggle = ["Production", "Consumption"];
 
-d3.select('select')
-  .selectAll('toggleOptions')
-  .data(toggle)
-  .enter()
-  .append('option')
-  .text(d => d)
-  .attr('value', d => d)
+// d3.select('select')
+//   .selectAll('option')
+//   .data(toggle)
+//   .enter()
+//   .append('option')
+//   .text(d => d)
+//   .attr('value', d => d)
 
 // d3.select('.map-container')
 //   .append('div')
 //   .attr('class', 'map-title')
 //   .text('World Map')
+
+
+console.log('hello')
+let selected = document.getElementById('selectDropdown')
+let dropdownOptions = selected.options;
+console.log(selected.options[selected.options.selectedIndex].text)
+
+let dropdown = d3.select('#selectDropdown');
+  // .on('onchange', e => {
+  //   console.log(e)
+  // })
+
+  console.log(dropdown)
