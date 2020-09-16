@@ -1,10 +1,10 @@
 import { loadAndProcessData } from './loadAndProcessData.js'
-import { data } from 'autoprefixer';
-import { selectAll } from 'd3';
+
+console.log('hello')
 
 let margin = { top: 50, left: 50, right: 50, bottom: 50 },
     height = 600 - margin.top - margin.bottom,
-    width = 900 - margin.left - margin.right;
+    width = 950 - margin.left - margin.right;
 
 let svg = d3.select("#map")
     .append('svg')
@@ -12,7 +12,7 @@ let svg = d3.select("#map")
     .attr('width', width + margin.left + margin.right)
     .attr('class', 'countries')
     .append('g')
-    .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+    .attr('transform', 'translate(' + -15 + ',' + margin.top + ')')
     // .attr('transform', 'translate(0, 30)')
 
 
@@ -57,7 +57,7 @@ loadAndProcessData(2019).then(countries => {
   // )
 
   let whichData = d3.select("#selectDropdown")
-  console.log(whichData)
+  // console.log(whichData)
 
   colorScale.domain([0, 100, 500, 2000, 4000, 8000, 12000, 16000, 20000]);
   colorScale.domain().sort((b, a) => a - b);
@@ -177,11 +177,6 @@ d3.select('select')
   .append('option')
   .text(d => d)
   .attr('value', d => d)
-  .on('change', d => {
-      debugger
-      let selected = d3.select('#selectDropdown').node().value;
-      console.log(selected)
-  })
 
 // d3.select('.map-container')
 //   .append('div')
