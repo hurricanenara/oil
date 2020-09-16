@@ -17,10 +17,12 @@ export const loadAndProcessData = (fetchDataByThisYear, dataType="Production") =
               return acc;
             }, {});
           } else if (dataType === "Consumption") {
+            debugger
             valuesByCountry = consumptionData.reduce((acc, d) => {
               let country = d.country;
               let year = fetchDataByThisYear;
               acc[country] = { country: country, output: +d[year] }
+              debugger
               return acc;
             }, {});
           }
@@ -38,5 +40,6 @@ export const loadAndProcessData = (fetchDataByThisYear, dataType="Production") =
                });
              }
            });
+           debugger
            return countries;
          });
