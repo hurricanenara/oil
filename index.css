@@ -20,7 +20,7 @@
 }
 
 .intro-text {
-    width: 57%;
+    width: 60%;
     height: 210px;
     margin: 0 auto;
     letter-spacing: 0.1px;
@@ -157,6 +157,7 @@ svg {
     height: 32px;
     outline: none;
     border-radius: 10px;
+    padding-left: 4px;
 }
 
 .row {
