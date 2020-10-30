@@ -1,3 +1,5 @@
+### [Oil](https://hurricanenara.github.io/oil/)
+
 ### Background
 We all use it, but only few know about it. Some of the earliest civilizations relied heavily on oil. The Babylonians used it to waterproof their boat, the Egyptians used it to help preserve corpses. But it wasn't until the 19th centuries the full potential of the mysterious black substance was understood and exploited. This interactive map of oil attempts to help provide comprehensive and objective data about oil.
 
@@ -9,7 +11,7 @@ With the interactive map of oil, users will be able to:
   - Learn the issues that arise in each stream (upstream, midstream, downstream)
 
 ### Wireframe
-[https://wireframe.cc/hPMhVD]
+[Link to Wireframe](https://wireframe.cc/hPMhVD)
 
 ### Technologies
 d3.js, geojson, JavaScript, canvas
