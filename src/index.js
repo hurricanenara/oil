@@ -92,9 +92,10 @@ let fetchDataByThisYear = 2019;
 let dataTime = d3.range(0, 15).map(d => new Date(2005 + d, 10, 3))
 const selected = document.getElementById('selectDropdown')
 let dataType = selected.options[selected.options.selectedIndex].text;
+console.log(d3.select('selectDropdown'));
 
 let slider = d3
-  .sliderBottom()
+  .sliderHorizontal()
   .min(d3.min(dataTime))
   .max(d3.max(dataTime))
   .step(1000 * 60 * 60 * 24 * 365)
@@ -152,7 +153,7 @@ let slider = d3
             .style("opacity", 0);
         })
     });
-  })
+})
 
 d3.select('#slider')
   .append('svg')
@@ -160,7 +161,8 @@ d3.select('#slider')
   .attr('height', 100)
   .append('g')
   .attr('transform', 'translate(30, 30)')
-  .call(slider)
+  .call(slider);
+
 
   let dropdown = d3.select('#selectDropdown')
   .on('change', function(d) {
