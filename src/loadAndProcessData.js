@@ -1,33 +1,31 @@
-
-
-export const loadAndProcessData = (fetchDataByThisYear) =>
+export const loadAndProcessData = (fetchDataByThisYear, dataType="Production") =>
          Promise.all([
            d3.json(
-             "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json"),
-           d3.csv("src/assets/data/2005-2019.csv"),
+             "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-10m.json"),
+           d3.csv("src/assets/data/2005-2019PROD.csv"),
+           d3.csv("src/assets/data/2005-2019CONS.csv")
           //  d3.csv("src/assets/data/jan2020Test.csv"),
-         ]).then(([topoJSONdata, productionData]) => {
+         ]).then(([topoJSONdata, productionData, consumptionData]) => {
 
-            // const mydata = productionData.map(data => {
-            //     return data["2019"];
-            // })
-            // console.log(mydata)
-            // console.log(productionData)
-            // const data2015 = productionData.map()
+          let valuesByCountry;
 
-        //    let myDate = productionData[0].data[0].date;
-        //    let year = new Date(myDate).getFullYear() + 1;
-        //    console.log(year);
-
-           const outputByCountry = productionData.reduce((acc, d) => {
-             let country = d.country;
-             let year = fetchDataByThisYear;
-             acc[country] = {country: country, output: +d[year]}
-            //  debugger
-             return acc;
-           }, {});
-
-          //  console.log(outputByCountry)
+          if (dataType === "Production") {
+            valuesByCountry = productionData.reduce((acc, d) => {
+              let country = d.country;
+              let year = fetchDataByThisYear;
+              acc[country] = {country: country, output: +d[year]}
+              return acc;
+            }, {});
+          } else if (dataType === "Consumption") {
+            debugger
+            valuesByCountry = consumptionData.reduce((acc, d) => {
+              let country = d.country;
+              let year = fetchDataByThisYear;
+              acc[country] = { country: country, output: +d[year] }
+              debugger
+              return acc;
+            }, {});
+          }
 
            const countries = topojson.feature(
              topoJSONdata,
@@ -35,12 +33,13 @@ export const loadAndProcessData = (fetchDataByThisYear) =>
            );
 
            countries.features.forEach((d) => {
-             if (outputByCountry[d.properties.name]) {
+            //  debugger
+             if (valuesByCountry[d.properties.name]) {
                Object.assign(d, {
-                 output: +outputByCountry[d.properties.name].output,
+                 output: +valuesByCountry[d.properties.name].output,
                });
              }
            });
-
+           debugger
            return countries;
          });

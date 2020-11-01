@@ -1,16 +1,17 @@
 import { loadAndProcessData } from './loadAndProcessData.js'
-import { data } from 'autoprefixer';
 
 let margin = { top: 50, left: 50, right: 50, bottom: 50 },
     height = 600 - margin.top - margin.bottom,
-    width = 1100 - margin.left - margin.right;
+    width = 950 - margin.left - margin.right;
 
 let svg = d3.select("#map")
     .append('svg')
     .attr('height', height + margin.top + margin.bottom)
-    .attr('width', width + margin.left, margin.right)
+    .attr('width', width + margin.left + margin.right)
+    .attr('class', 'countries')
     .append('g')
-    .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+    .attr('transform', 'translate(' + -15 + ',' + margin.top + ')')
+
 
 const projection = d3.geoNaturalEarth1();
 const pathGenerator = d3.geoPath().projection(projection);
@@ -27,7 +28,6 @@ g.call(d3.zoom().on('zoom', () => {
 }));
 
 d3.select("#zoom-in").on("click", function () {
-  // Smooth zooming
   d3.zoom()
     .on("zoom", () => {
       g.attr("transform", d3.event.transform);
@@ -37,7 +37,6 @@ d3.select("#zoom-in").on("click", function () {
 
 d3.select("#zoom-out")
     .on("click", function () {
-  // Ordinal zooming
   d3.zoom()
     .on("zoom", () => {
       g.attr("transform", d3.event.transform);
@@ -45,37 +44,20 @@ d3.select("#zoom-out")
     .scaleBy(g.transition().duration(550), 1 / 1.3);
 });
 
-const dataType = ["Production", "Consumption"];
-
-d3.select('#selectDropdown')
-  .selectAll('dataTypeOptions')
-    .data(dataType)
-    .enter()
-    .append('option')
-    .text(d => d)
-    .attr('value', d => d);
-
-let colorScale = d3.scaleOrdinal();
+let colorScale = d3.scaleThreshold(d3.schemeCategory10);
 
 loadAndProcessData(2019).then(countries => {
-  debugger
-  // colorScale.domain(countries.features.map(d => { if (typeof d.output === 'number') return d.output }))
-  colorScale.domain(countries.features.map(d => {
-    debugger
-    if (typeof d.output === 'number') {
-      return d.output;
-    } else {
-      return 0;
-    }
-     }
-  ))
-  colorScale.domain().sort((b, a) => a - b);
-  colorScale.range(d3.schemeSpectral[9]);
-  // console.log(countries)
-  console.log(colorScale.domain().sort((b, a) => a - b));
-  console.log(colorScale.domain())
 
-  g.selectAll("path")
+  colorScale.domain([0, 100, 500, 2000, 4000, 8000, 12000, 16000, 20000]);
+  colorScale.domain().sort((b, a) => a - b);
+  colorScale.range(d3.schemePurples[9])
+
+  let tooltip = d3.select('#map').append('div')
+     .attr('class', 'tooltip')
+     .style('opacity', 0)
+
+  const original = g
+    .selectAll("path")
     .data(countries.features)
     .enter()
     .append("path")
@@ -88,14 +70,28 @@ loadAndProcessData(2019).then(countries => {
         return "rgba(204, 204, 204, 1)";
       }
     })
+    .on("mouseover", d => {
+      tooltip.transition()
+        .duration(400)
+        .style("opacity", 0.7);
+      tooltip.html(`${d.properties.name}: ${Math.round((d.output * 0.0001) + 'e+1')} mb/d`)
+        .style('left', (d3.event.pageX) + 'px')
+        .style('top', (d3.event.pageY) + 'px');
+    })
+    .on("mouseout", d => {
+      tooltip.transition()
+      .duration(500)
+      .style("opacity", 0);
+    })
     .append("title")
-    .text((d) => `${d.properties.name}: ${Math.round((d.output * 0.01) + 'e+1') * 0.01} mb/d`);
-});
+  });
 
 let fetchDataByThisYear = 2019;
 
 //slider
 let dataTime = d3.range(0, 15).map(d => new Date(2005 + d, 10, 3))
+const selected = document.getElementById('selectDropdown')
+let dataType = selected.options[selected.options.selectedIndex].text;
 
 let slider = d3
   .sliderBottom()
@@ -107,41 +103,54 @@ let slider = d3
   .tickValues(dataTime)
   .default(new Date(2019, 10, 3))
   .on('onchange', val => {
-    debugger
     fetchDataByThisYear = new Date(val).getFullYear();
-    
-    loadAndProcessData(fetchDataByThisYear).then(countries => {
-      debugger
-      // colorScale.domain(countries.features.map(d => { if (typeof d.output === 'number') return d.output }))
-      colorScale.domain(countries.features.map(d => {
-        if (typeof d.output === 'number') {
-          return d.output;
-        } else {
-          return 0;
-        }
-      }
-      ))
-      colorScale.domain().sort((b, a) => a - b);
-      colorScale.range(d3.schemeSpectral[9]);
-      // console.log(countries)
-      console.log(colorScale.domain().sort((b, a) => a - b));
-      console.log(colorScale.domain())
+    console.log(fetchDataByThisYear)
 
-      g.selectAll("path")
+    // nest timeline inside of production/consumption
+    // does it really matter?
+    let dropdown = d3.select('#selectDropdown')
+    //   .on('change', function (d) {
+      dataType = selected.options[selected.options.selectedIndex].text;
+    
+    loadAndProcessData(fetchDataByThisYear, dataType).then(countries => {
+      debugger
+      colorScale = d3.scaleThreshold(d3.schemeCategory10);
+      colorScale.domain([0, 100, 500, 2000, 4000, 8000, 12000, 16000, 20000]);
+      colorScale.domain().sort((b, a) => a - b);
+      colorScale.range(d3.schemePurples[9])
+
+      let tooltip = d3.select('#map').append('div')
+        .attr('class', 'tooltip')
+        .style('opacity', 0)
+
+      const selection = g
+        .selectAll("path")
         .data(countries.features)
-        .enter()
-        .append("path")
-        .attr("class", "country")
-        .attr("d", pathGenerator)
         .attr("fill", d => {
           if (typeof d.output === 'number') {
+            debugger
             return colorScale(d.output)
           } else {
             return "rgba(204, 204, 204, 1)";
           }
         })
-        .append("title")
-        .text((d) => `${d.properties.name}: ${Math.round((d.output * 0.01) + 'e+1') * 0.01} mb/d`);
+        .enter()
+        // .append("path")
+        .attr("class", "country")
+        .attr("d", pathGenerator)
+        .on("mouseover", d => {
+          tooltip.transition()
+            .duration(400)
+            .style("opacity", 0.7);
+          tooltip.html(`${d.properties.name}: ${Math.round((d.output * 0.001) + 'e+1')} mb/d`)
+            .style('left', (d3.event.pageX) + 'px')
+            .style('top', (d3.event.pageY) + 'px');
+        })
+        .on("mouseout", d => {
+          tooltip.transition()
+            .duration(500)
+            .style("opacity", 0);
+        })
     });
   })
 
@@ -152,6 +161,87 @@ d3.select('#slider')
   .append('g')
   .attr('transform', 'translate(30, 30)')
   .call(slider)
-//
 
-  
+  let dropdown = d3.select('#selectDropdown')
+  .on('change', function(d) {
+    let selected = document.getElementById('selectDropdown')
+    let initialDataType = selected.options[selected.options.selectedIndex].text;
+    // console.log(selected.options[selected.options.selectedIndex].text)
+        loadAndProcessData(2019, initialDataType).then(countries => {
+      debugger
+      colorScale = d3.scaleThreshold(d3.schemeCategory10);
+      colorScale.domain([0, 100, 500, 2000, 4000, 8000, 12000, 16000, 20000]);
+      colorScale.domain().sort((b, a) => a - b);
+      colorScale.range(d3.schemePurples[9])
+
+      let tooltip = d3.select('#map').append('div')
+        .attr('class', 'tooltip')
+        .style('opacity', 0)
+
+      const selection = g
+        .selectAll("path")
+        .data(countries.features)
+        .attr("fill", d => {
+          if (typeof d.output === 'number') {
+            debugger
+            return colorScale(d.output)
+          } else {
+            return "rgba(204, 204, 204, 1)";
+          }
+        })
+        .enter()
+        // .append("path")
+        .attr("class", "country")
+        .attr("d", pathGenerator)
+        .on("mouseover", d => {
+          tooltip.transition()
+            .duration(400)
+            .style("opacity", 0.7);
+          tooltip.html(`${d.properties.name}: ${Math.round((d.output * 0.001) + 'e+1')} mb/d`)
+            .style('left', (d3.event.pageX) + 'px')
+            .style('top', (d3.event.pageY) + 'px');
+        })
+        .on("mouseout", d => {
+          tooltip.transition()
+            .duration(500)
+            .style("opacity", 0);
+        })
+    });
+  })
+
+
+
+
+  // .on('onchange', e => {
+  //   console.log(e)
+  // })
+
+// const toggle = ["Production", "Consumption"];
+
+// d3.select('select')
+//   .selectAll('option')
+//   .data(toggle)
+//   .enter()
+//   .append('option')
+//   .text(d => d)
+//   .attr('value', d => d)
+
+// d3.select('.map-container')
+//   .append('div')
+//   .attr('class', 'map-title')
+//   .text('World Map')
+
+
+// console.log('hello')
+// let selected = document.getElementById('selectDropdown')
+// let dropdownOptions = selected.options;
+// console.log(selected.options[selected.options.selectedIndex].text)
+
+// let dropdown = d3.select('#selectDropdown')
+//   .on('change', function(d) {
+//     let selected = document.getElementById('selectDropdown')
+//     console.log(selected.options[selected.options.selectedIndex].text)
+//   })
+  // .on('onchange', e => {
+  //   console.log(e)
+  // })
