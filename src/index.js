@@ -104,6 +104,7 @@ let slider = d3
   .default(new Date(2019, 10, 3))
   .on('onchange', val => {
     fetchDataByThisYear = new Date(val).getFullYear();
+    console.log(fetchDataByThisYear)
 
     // nest timeline inside of production/consumption
     // does it really matter?
