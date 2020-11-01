@@ -55,7 +55,6 @@ loadAndProcessData(2019).then(countries => {
   let tooltip = d3.select('#map').append('div')
      .attr('class', 'tooltip')
      .style('opacity', 0)
-    console.log(tooltip)
 
   const original = g
     .selectAll("path")
@@ -71,16 +70,15 @@ loadAndProcessData(2019).then(countries => {
         return "rgba(204, 204, 204, 1)";
       }
     })
-    .on("mouseover", d => {
-      console.log(d)
+    .on("mouseover", (e, d) => {
       tooltip.transition()
         .duration(400)
         .style("opacity", 0.7);
       tooltip.html(`${d.properties.name}: ${Math.round((d.output * 0.0001) + 'e+1')} mb/d`)
-        .style('left', (d3.event.pageX) + 'px')
-        .style('top', (d3.event.pageY) + 'px');
+        .style('left', (e.pageX) + 'px')
+        .style('top', (e.pageY) + 'px');
     })
-    .on("mouseout", d => {
+    .on("mouseout", (e, d) => {
       tooltip.transition()
       .duration(500)
       .style("opacity", 0);
@@ -94,7 +92,6 @@ let fetchDataByThisYear = 2019;
 let dataTime = d3.range(0, 15).map(d => new Date(2005 + d, 10, 3))
 const selected = document.getElementById('selectDropdown')
 let dataType = selected.options[selected.options.selectedIndex].text;
-console.log(d3.select('selectDropdown'));
 
 let slider = d3
   .sliderHorizontal()
@@ -107,7 +104,6 @@ let slider = d3
   .default(new Date(2019, 10, 3))
   .on('onchange', val => {
     fetchDataByThisYear = new Date(val).getFullYear();
-    console.log(fetchDataByThisYear)
 
     // nest timeline inside of production/consumption
     // does it really matter?
@@ -170,7 +166,6 @@ d3.select('#slider')
   .on('change', function(d) {
     let selected = document.getElementById('selectDropdown')
     let initialDataType = selected.options[selected.options.selectedIndex].text;
-    // console.log(selected.options[selected.options.selectedIndex].text)
         loadAndProcessData(2019, initialDataType).then(countries => {
       debugger
       colorScale = d3.scaleThreshold(d3.schemeCategory10);
@@ -211,41 +206,4 @@ d3.select('#slider')
             .style("opacity", 0);
         })
     });
-  })
-
-
-
-
-  // .on('onchange', e => {
-  //   console.log(e)
-  // })
-
-// const toggle = ["Production", "Consumption"];
-
-// d3.select('select')
-//   .selectAll('option')
-//   .data(toggle)
-//   .enter()
-//   .append('option')
-//   .text(d => d)
-//   .attr('value', d => d)
-
-// d3.select('.map-container')
-//   .append('div')
-//   .attr('class', 'map-title')
-//   .text('World Map')
-
-
-// console.log('hello')
-// let selected = document.getElementById('selectDropdown')
-// let dropdownOptions = selected.options;
-// console.log(selected.options[selected.options.selectedIndex].text)
-
-// let dropdown = d3.select('#selectDropdown')
-//   .on('change', function(d) {
-//     let selected = document.getElementById('selectDropdown')
-//     console.log(selected.options[selected.options.selectedIndex].text)
-//   })
-  // .on('onchange', e => {
-  //   console.log(e)
-  // })
+  });
