@@ -55,6 +55,7 @@ loadAndProcessData(2019).then(countries => {
   let tooltip = d3.select('#map').append('div')
      .attr('class', 'tooltip')
      .style('opacity', 0)
+    console.log(tooltip)
 
   const original = g
     .selectAll("path")
@@ -71,6 +72,7 @@ loadAndProcessData(2019).then(countries => {
       }
     })
     .on("mouseover", d => {
+      console.log(d)
       tooltip.transition()
         .duration(400)
         .style("opacity", 0.7);
