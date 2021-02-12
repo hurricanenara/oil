@@ -235,6 +235,10 @@ footer {
 	width: 49.2%;
 }
 
+.note {
+    font-size: .85em;
+}
+
 @keyframes gradient {
 	0% {
 		background-position: 0% 50%;
