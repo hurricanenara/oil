@@ -4,59 +4,85 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Crude</title>
-    <meta prefix="og: http://ogp.me/ns#" property='og:image' content='https://i.imgur.com/CJrHoUJ.png' />
-    <meta prefix="og: http://ogp.me/ns#" property='og:title' content='Crude in Colors' />
-    <meta prefix="og: http://ogp.me/ns#" property='og:description'
-      content='Oil is an interactive data visualization map of oil economics.' />
+    <meta
+      prefix="og: http://ogp.me/ns#"
+      property="og:image"
+      content="https://i.imgur.com/CJrHoUJ.png"
+    />
+    <meta
+      prefix="og: http://ogp.me/ns#"
+      property="og:title"
+      content="Crude in Colors"
+    />
+    <meta
+      prefix="og: http://ogp.me/ns#"
+      property="og:description"
+      content="Oil is an interactive data visualization map of oil economics."
+    />
     <!-- <script src="https://d3js.org/d3.v5.min.js"></script> -->
     <script src="https://d3js.org/d3.v6.min.js"></script>
     <script src="https://d3js.org/topojson.v1.min.js"></script>
     <script src="https://unpkg.com/d3-simple-slider"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="shortcut icon" href="./src/assets/images/oil.ico" type="image/x-icon">
-    <link rel="stylesheet" href="index.css" type="text/css">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="shortcut icon"
+      href="./src/assets/images/oil.ico"
+      type="image/x-icon"
+    />
+    <link rel="stylesheet" href="index.css" type="text/css" />
     <script src="./dist/main.js" defer></script>
   </head>
 
   <body>
-      <header class="title-container">
-        <div class="row">
-          <h1>
-            Crude in Numbers
-          </h1>
-            <nav>
-              <ul class="main-nav">
-                <li><a href="#map">Map</a></li>
-                <!-- <li><a href="#chart">Chart</a></li>
+    <header class="title-container">
+      <div class="row">
+        <h1>Crude in Numbers</h1>
+        <nav>
+          <ul class="main-nav">
+            <li><a href="#map">Map</a></li>
+            <!-- <li><a href="#chart">Chart</a></li>
                 <li><a href="#environment">Environment</a></li> -->
-              </ul>
-            </nav>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <section class="intro-text">
+      <div class="row">
+        We all use it, but only few know about it. Some of the earliest
+        civilizations relied heavily on oil. The Babylonians used it to
+        waterproof their boat, the Egyptians used it to help preserve corpses.
+        But it wasn't until the 19th centuries the full potential of the
+        mysterious black substance was understood and exploited.
+        <div class="spacer"></div>
+        <span
+          >This interactive map of oil attempts to help provide comprehensive
+          and objective data about oil.</span
+        >
+        <div class="spacer"></div>
+        <span class="note"
+          >Note: Data shown in million barrels per day (mb/d)</span
+        >
+      </div>
+    </section>
+    <section class="map-features">
+      <div class="row">
+        <div class="controls">
+          <div id="slider"></div>
+          <select id="selectDropdown">
+            <option value="1">Production</option>
+            <option value="2">Consumption</option>
+          </select>
         </div>
-      </header>
-      <section class="intro-text">
-        <div class="row">
-          We all use it, but only few know about it. Some of the earliest civilizations relied heavily on oil. The Babylonians
-          used it to waterproof their boat, the Egyptians used it to help preserve corpses. But it wasn't until the 19th centuries
-          the full potential of the mysterious black substance was understood and exploited.
-          <div class="spacer"></div>
-          <span>This interactive map of oil attempts to help provide comprehensive and objective data about oil.</span>
-          <div class="spacer"></div>
-          <span class="note">Note: Data shown in million barrels per day (mb/d)</span>
-        </div>
-      </section>
-      <section  class="map-features">
-        <div class="row">
-          <div class="controls">
-            <div id="slider"></div>
-            <select id="selectDropdown">
-              <option value="1">Production</option>
-              <option value="2">Consumption</option>
-            </select>  
-          </div>
-        </div>
-        <div class="row" id="map">
-            <!-- <svg class="zoom-controls" transform="translate(10, 10)">
+      </div>
+      <div class="row" id="map">
+        <!-- <svg class="zoom-controls" transform="translate(10, 10)">
               <g id="zoom-in" transform="translate(0, 0)">
                 <rect width="30" height="30">+</rect>
               </g>
@@ -64,9 +90,9 @@
                 <rect width="30" height="30">-</rect>
               </g>
             </svg> -->
-        </div>
-      </section>
-      <!-- <section class="bar-graph-features">
+      </div>
+    </section>
+    <!-- <section class="bar-graph-features">
         <div class="row bar-graph-container">
           Bar graph placeholder
         </div>
@@ -75,11 +101,10 @@
       <div class="row footer-container">
         <div class="intro-right">
           <ul>
-            <li><a href="https://www.linkedin.com/in/naraskim/" target="_blank"><i class="fa fa-linkedin-square"
-                  ></i></a></li>
-            <li><a href="https://github.com/hurricanenara/oil" target="_blank"><i class="fa fa-github-square"
-                  ></i></a></li>
-            <li><a href="https://angel.co/u/naraslee" target="_blank"><i class="fa fa-angellist" ></i></a>
+            <li>
+              <a href="https://github.com/hurricanenara/oil" target="_blank"
+                ><i class="fa fa-github-square"></i
+              ></a>
             </li>
           </ul>
         </div>
